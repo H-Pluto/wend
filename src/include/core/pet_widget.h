@@ -2,21 +2,36 @@
 
 #include <QLabel>
 #include <QPoint>
+#include <QPixmap>
+#include <QSize>
+#include <QMovie>
+
+class QAbstractAnimation;
+class QMouseEvent;
+class QContextMenuEvent;
 
 class PetWidget : public QLabel {
-    // Q_OBJECT 是 Qt 的宏，告诉 MOC（元对象编译器）这个类需要 Qt 的元对象功能。
     Q_OBJECT
-    
+
 public:
-    explicit PetWidget(QWidget *parent = nullptr);  // explicit 必须显示定义
+    explicit PetWidget(QWidget *parent = nullptr);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-
-    void mouseMoveEvent(QMouseEvent *event);
-
-    void contextMenuEvent(QContextMenuEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
+    QMovie *m_movie = nullptr;
+    QSize m_targetSize{200, 200};
+
+    QPixmap makeRoundedPixmap(const QSize &size);
+    void applySize(const QSize &size);
+    void startBreathing();
+
     QPoint m_dragPosition;
+    QAbstractAnimation *m_sizeAnim = nullptr;
+    bool m_animating = false;
 };
