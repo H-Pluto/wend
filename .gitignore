@@ -57,3 +57,6 @@ compile_commands.json
 
 # vcpkg_installed
 vcpkg_installed/
+
+# 打包输出
+dist/
