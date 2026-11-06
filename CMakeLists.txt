@@ -8,6 +8,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(box2d CONFIG REQUIRED)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     src/*.cpp
@@ -20,12 +21,19 @@ file(GLOB_RECURSE RESOURCES CONFIGURE_DEPENDS
 
 
 add_executable(Wend WIN32 ${SOURCES} ${RESOURCES}) # WIN32 表示不弹出黑色控制台窗口
-target_link_libraries(Wend PRIVATE Qt6::Widgets)
+target_link_libraries(Wend PRIVATE Qt6::Widgets box2d::box2d)
 
 # Release 包去掉符号表，体积能小一大半
 target_link_options(Wend PRIVATE $<$<CONFIG:Release>:-s>)
 
 install(TARGETS Wend RUNTIME DESTINATION .)
+install(FILES $<TARGET_FILE:box2d::box2d> DESTINATION .)
+
+# 直接跑 build 目录下的 exe 时也能找到 box2d.dll
+add_custom_command(TARGET Wend POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:box2d::box2d> $<TARGET_FILE_DIR:Wend>
+)
 
 # 打包：安装时跑 windeployqt，把 Qt 运行时 DLL 和插件补到 exe 旁边，
 # 得到的目录可以直接压缩分发（目标机器不需要装 Qt）

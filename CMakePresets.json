@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 6,
   "configurePresets": [
     {
       "name": "default",
@@ -31,6 +31,27 @@
     {
       "name": "release",
       "configurePreset": "release"
+    },
+    {
+      "name": "package",
+      "configurePreset": "release",
+      "targets": ["install"]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "package",
+      "displayName": "打包工作流",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "package"
+        }
+      ]
     }
   ]
 }
