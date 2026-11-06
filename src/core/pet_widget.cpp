@@ -34,6 +34,7 @@ PetWidget::PetWidget(QWidget *parent) : QLabel(parent) {
     setAttribute(Qt::WA_TranslucentBackground);
     setFixedSize(kWindowWidth, kWindowHeight);
     setCursor(Qt::OpenHandCursor);
+    setStyleSheet("font-size: 14px; color: white; background: transparent;");
 
     m_movie = new QMovie(":/images/nai_wa.gif", QByteArray(), this);
     if (m_movie->isValid()) {
